@@ -9,7 +9,7 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { HamburgerIcon, SmallCloseIcon } from "@chakra-ui/icons";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigation } from "react-router-dom";
 import { GiSoccerBall, GiStairsGoal } from "react-icons/gi";
 
 const routes = [
@@ -35,6 +35,12 @@ const routes = [
 
 const Nav = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const navigate = useNavigation();
+
+  const goToPath = (path) => {
+    setToggleMenu(false);
+    return navigate(path);
+  };
 
   return (
     <Box
@@ -72,6 +78,7 @@ const Nav = () => {
                     <Box key={route.id}>
                       <NavLink
                         end
+                        // onClick={() => goToPath(route.path)}
                         to={`${route.path}`}
                         style={(props) => {
                           const { isActive } = props;

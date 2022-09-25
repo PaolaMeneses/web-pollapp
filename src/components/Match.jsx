@@ -3,6 +3,7 @@ import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Circle,
   Flex,
   Grid,
   GridItem,
@@ -11,7 +12,7 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import useGoalPrediction from "../hooks/useGoalPrediction";
+
 function MatchTeam(props) {
   const { team } = props;
 
@@ -32,11 +33,16 @@ function MatchTeam(props) {
 }
 
 function Match(props) {
-  const { match } = props;
-  const [localGoalPrediction, localMinusGoal, localAddGoal] =
-    useGoalPrediction(null);
-  const [visitorGoalPrediction, visitorMinusGoal, visitorAddGoal] =
-    useGoalPrediction(null);
+  const {
+    match,
+    type,
+    showPredictionBtns,
+    showMatchPoints,
+    handlerLocalPrediction = {},
+    handlerVisitorPrediction = {},
+  } = props;
+  const { localMinusGoal, localAddGoal } = handlerLocalPrediction;
+  const { visitorMinusGoal, visitorAddGoal } = handlerVisitorPrediction;
 
   return (
     <>
@@ -48,18 +54,19 @@ function Match(props) {
         // style={{ border: ".5px solid red" }}
       >
         <Box px={3} pb={1} borderTop="red">
-          <Grid templateColumns="repeat(3, 1fr)">
+          <Grid templateColumns="repeat(4, 1fr)">
             <Spacer />
-            <Box
+            <GridItem
               bg="brand.500"
               mb={1}
-              borderBottomStartRadius="lg"
-              borderBottomEndRadius="lg"
+              borderBottomStartRadius="full"
+              borderBottomEndRadius="full"
+              colSpan={2}
             >
-              <Text color="#fff" fontSize="xs">
-                {`PARTIDO ${match.id}`}
+              <Text color="#fff" fontSize="xs" height="18px">
+                {`FASE GRUPOS GRUPO A`}
               </Text>
-            </Box>
+            </GridItem>
             <Spacer />
           </Grid>
           <Grid templateColumns="repeat(3, 1fr)" gap={1}>
@@ -69,80 +76,117 @@ function Match(props) {
               // style={{ border: ".5px solid red" }}
             >
               <GridItem rowSpan={2}>
-                <Text fontSize={{ base: "40px" }}>
-                  {`${match.localGoals ?? ""} - ${match.visitorGoals ?? ""}`}
-                </Text>
+                {type === "upcoming" ? (
+                  <Flex
+                    flexDirection="column"
+                    justifyContent="flex-end"
+                    // style={{ border: ".5px solid red" }}
+                    color="gray"
+                    h="100%"
+                  >
+                    <Text as="b" fontSize="lg">
+                      {match.date}
+                    </Text>
+                    <Text fontSize="md">{match.time}</Text>
+                  </Flex>
+                ) : (
+                  <Text fontSize={{ base: "40px" }}>
+                    {`${match.localGoals ?? ""} - ${match.visitorGoals ?? ""}`}
+                  </Text>
+                )}
               </GridItem>
               <GridItem rowSpan={1}>
-                <Text as="i" fontSize={{ base: "15px" }}>
+                <Text as="i" fontWeight="bold" fontSize={{ base: "15px" }}>
                   VS
                 </Text>
               </GridItem>
               <GridItem rowSpan={1}>
                 <Text fontSize={{ base: "20px" }}>{`${
-                  localGoalPrediction ?? ""
-                } - ${visitorGoalPrediction ?? ""}`}</Text>
+                  match.localGoalPrediction ?? ""
+                } - ${match.visitorGoalPrediction ?? ""}`}</Text>
               </GridItem>
             </Grid>
             <MatchTeam team={match.visitor} />
           </Grid>
-          <Grid templateColumns="repeat(3, 1fr)" mb={3}>
-            <Flex justifyContent="space-around">
-              <IconButton
-                onClick={localMinusGoal}
-                disabled={localGoalPrediction <= 0}
-                aria-label="minusGoals"
-                colorScheme="red"
-                size="sm"
-                icon={<MinusIcon />}
-              />
-              <IconButton
-                onClick={localAddGoal}
-                aria-label="addGoals"
-                colorScheme="blue"
-                size="sm"
-                icon={<AddIcon />}
-              />
-            </Flex>
-            <Text>
-              {match.date} {match.time}
-            </Text>
-            <Flex justifyContent="space-around">
-              <IconButton
-                onClick={visitorMinusGoal}
-                disabled={visitorGoalPrediction <= 0}
-                aria-label="minusGoals"
-                colorScheme="red"
-                size="sm"
-                icon={<MinusIcon />}
-              />
-              <IconButton
-                onClick={visitorAddGoal}
-                aria-label="addGoals"
-                colorScheme="blue"
-                size="sm"
-                icon={<AddIcon />}
-              />
-            </Flex>
-          </Grid>
+          {showPredictionBtns && (
+            <Grid templateColumns="repeat(3, 1fr)" mb={3}>
+              <Flex justifyContent="space-around">
+                <IconButton
+                  onClick={localMinusGoal}
+                  disabled={match.localGoalPrediction <= 0}
+                  aria-label="minusGoals"
+                  colorScheme="gray"
+                  size="sm"
+                  icon={<MinusIcon color="brand.500" />}
+                />
+                <IconButton
+                  onClick={localAddGoal}
+                  aria-label="addGoals"
+                  colorScheme="gray"
+                  size="sm"
+                  icon={<AddIcon color="brand.500" />}
+                />
+              </Flex>
+              <Spacer />
+              <Flex justifyContent="space-around">
+                <IconButton
+                  onClick={visitorMinusGoal}
+                  disabled={match.visitorGoalPrediction <= 0}
+                  aria-label="minusGoals"
+                  colorScheme="gray"
+                  size="sm"
+                  icon={<MinusIcon color="brand.500" />}
+                />
+                <IconButton
+                  onClick={visitorAddGoal}
+                  aria-label="addGoals"
+                  colorScheme="gray"
+                  size="sm"
+                  icon={<AddIcon color="brand.500" />}
+                />
+              </Flex>
+            </Grid>
+          )}
         </Box>
-        <Button
-          // style={{ border: ".5px solid red" }}
-          colorScheme="brand"
-          color="#fff"
-          disabled={
-            localGoalPrediction === null || visitorGoalPrediction == null
-          }
-          _focus={{ backgroundColor: "brand.500" }}
-          w="100%"
-          h={10}
-          shadow="xl"
-          borderRadius={0}
-          borderBottomStartRadius="lg"
-          borderBottomEndRadius="lg"
-        >
-          GUARDAR PREDICCIÓN
-        </Button>
+        {showPredictionBtns && (
+          <Button
+            // style={{ border: ".5px solid red" }}
+            colorScheme="brand"
+            color="#fff"
+            disabled={
+              match.localGoalPrediction === null ||
+              match.visitorGoalPrediction === null
+            }
+            _focus={{ backgroundColor: "brand.500" }}
+            w="100%"
+            h={10}
+            shadow="xl"
+            borderRadius={0}
+            borderBottomStartRadius="lg"
+            borderBottomEndRadius="lg"
+          >
+            GUARDAR PREDICCIÓN
+          </Button>
+        )}
+        {showMatchPoints && (
+          <Box
+            position="relative"
+            //  style={{ border: ".5px solid blue" }}
+          >
+            <Circle
+              bg="brand.500"
+              color="#fff"
+              size="40px"
+              rounded="full"
+              position="absolute"
+              bottom={-4}
+              right={-3}
+              shadow="lg"
+            >
+              <Text fontSize="xl">+0</Text>
+            </Circle>
+          </Box>
+        )}
       </Box>
     </>
   );

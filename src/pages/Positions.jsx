@@ -31,7 +31,7 @@ const playerPositions = [
 
 const Positions = () => {
   return (
-    <Layout headerText="Posiciones">
+    <>
       <TableContainer>
         <Table size="sm">
           <Thead>
@@ -52,7 +52,7 @@ const Positions = () => {
           </Tbody>
         </Table>
       </TableContainer>
-    </Layout>
+    </>
   );
 };
 

@@ -1,7 +1,9 @@
 import React from "react";
 
-const PreviousMatch = () => {
-  return <div>PreviousMatch</div>;
-};
+import Match from "./Match";
+
+function PreviousMatch({ match }) {
+  return <Match type="previous" showMatchPoints match={match} />;
+}
 
 export default PreviousMatch;
