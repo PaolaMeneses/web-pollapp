@@ -1,8 +1,12 @@
-import React from "react";
 import { Box, Text } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
 
-const Header = (props) => {
-  const { headerText = "Partidos" } = props;
+const Header = () => {
+  const { headerText } = useSelector((state) => state.app);
+
+  if (headerText === false) {
+    return;
+  }
 
   return (
     <Box

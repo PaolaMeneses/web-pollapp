@@ -1,7 +1,9 @@
 import React from "react";
 
 import {
+  Box,
   Flex,
+  Select,
   Stat,
   StatArrow,
   StatHelpText,
@@ -12,12 +14,11 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import Match from "../components/Match";
 import UpcomingMatch from "../components/UpcomingMatch";
 import PreviousMatch from "../components/PreviousMatch";
-import Layout from "../components/Layout";
 
 import teams from "../assets/data/teams.json";
+import useInitPage from "../hooks/useInitPage";
 const matches = [
   {
     id: 1,
@@ -93,30 +94,44 @@ const previousMatches = [
 ];
 
 function Matches() {
+  useInitPage({ headerText: "Partidos", showMenu: false });
   return (
     <>
-      <Stat>
-        <Flex
-          // style={{ border: ".5px solid red" }}
-          alignItems="flex-end"
-          flexDirection="column"
-        >
+      <Flex alignItems="center">
+        <Box>
+          <Text as="b" fontSize="lg">
+            Carton N°
+          </Text>
+          <Select>
+            <option value="119">119</option>
+            <option value="233">233</option>
+            <option value="445">445</option>
+          </Select>
+          {/* <Text>119</Text> */}
+        </Box>
+        <Stat>
           <Flex
-            alignItems="center"
-            // justifyContent="space-around"
             // style={{ border: ".5px solid red" }}
+            alignItems="flex-end"
+            flexDirection="column"
           >
-            <Text verticalAlign="baseline" as="b" fontSize="2xl">
-              9
-            </Text>
-            <Text ml={2}>Puntos</Text>
+            <Flex
+              alignItems="center"
+              // justifyContent="space-around"
+              // style={{ border: ".5px solid red" }}
+            >
+              <Text verticalAlign="baseline" as="b" fontSize="2xl">
+                9
+              </Text>
+              <Text ml={2}>Puntos</Text>
+            </Flex>
+            <StatHelpText fontSize="md">
+              <StatArrow type="increase" />
+              pos 3
+            </StatHelpText>
           </Flex>
-          <StatHelpText fontSize="md">
-            <StatArrow type="increase" />
-            pos 3
-          </StatHelpText>
-        </Flex>
-      </Stat>
+        </Stat>
+      </Flex>
       <Tabs colorScheme="brand" isFitted>
         <TabList mb="1em">
           <Tab>

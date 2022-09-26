@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Container,
@@ -9,8 +10,9 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { HamburgerIcon, SmallCloseIcon } from "@chakra-ui/icons";
-import { NavLink, useNavigation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { GiSoccerBall, GiStairsGoal } from "react-icons/gi";
+import { setAppConfig } from "../store/app";
 
 const routes = [
   {
@@ -34,13 +36,8 @@ const routes = [
 ];
 
 const Nav = () => {
-  const [toggleMenu, setToggleMenu] = useState(false);
-  const navigate = useNavigation();
-
-  const goToPath = (path) => {
-    setToggleMenu(false);
-    return navigate(path);
-  };
+  const dispatch = useDispatch();
+  const { showMenu } = useSelector((state) => state.app);
 
   return (
     <Box
@@ -59,7 +56,7 @@ const Nav = () => {
           </Text>
           {/* <Slide direction="bottom" in={toggleMenu}> */}
           <Box w="100%" position="fixed" left={0}>
-            <Slide direction="bottom" in={toggleMenu} style={{ zIndex: 10 }}>
+            <Slide direction="bottom" in={showMenu} style={{ zIndex: 10 }}>
               <Box
                 bg="#fff"
                 w="100%"
@@ -111,7 +108,7 @@ const Nav = () => {
                   <SmallCloseIcon
                     fontSize="2xl"
                     // style={{ border: ".5px solid red" }}
-                    onClick={() => setToggleMenu(false)}
+                    onClick={() => dispatch(setAppConfig({ showMenu: false }))}
                     // position="absolute"
                     // right="1.3rem"
                     // bottom="1rem"
@@ -124,7 +121,7 @@ const Nav = () => {
           <Flex alignItems="center">
             <HamburgerIcon
               fontSize={"3xl"}
-              onClick={() => setToggleMenu(true)}
+              onClick={() => dispatch(setAppConfig({ showMenu: true }))}
             />
           </Flex>
         </Flex>

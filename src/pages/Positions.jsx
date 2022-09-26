@@ -9,7 +9,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 
-import Layout from "../components/Layout";
+import useInitPage from "../hooks/useInitPage";
 
 const playerPositions = [
   {
@@ -30,6 +30,8 @@ const playerPositions = [
 ];
 
 const Positions = () => {
+  useInitPage({ headerText: "Posiciones", showMenu: false });
+
   return (
     <>
       <TableContainer>
