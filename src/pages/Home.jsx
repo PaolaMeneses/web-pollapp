@@ -4,7 +4,7 @@ import { SearchIcon } from "@chakra-ui/icons";
 
 const Home = () => {
   return (
-    <div>
+    <>
       <Flex gap={2}>
         <Input
           borderRadius={25}
@@ -19,7 +19,7 @@ const Home = () => {
           icon={<SearchIcon />}
         />
       </Flex>
-    </div>
+    </>
   );
 };
 

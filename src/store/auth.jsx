@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { authApi } from "../services/auth";
+import { authApi } from "../api/auth";
 
 const sliceName = "auth";
 const auth = JSON.parse(localStorage.getItem(sliceName));
@@ -19,7 +19,6 @@ export const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem(sliceName);
-      console.log("initialAuth :>> ", initialAuth);
       return { ...state, ...initialAuth };
     },
   },

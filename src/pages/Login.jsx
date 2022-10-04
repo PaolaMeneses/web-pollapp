@@ -13,14 +13,16 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import { useLoginMutation } from "../services/auth";
+import { useLoginMutation } from "../api/auth";
 import useInitPage from "../hooks/useInitPage";
 
 const Login = () => {
-  useInitPage({ logoutRequered: true });
   const navigate = useNavigate();
+
   const [userLogin, { isLoading, error, data }] = useLoginMutation();
   const [show, setShow] = useState(false);
+
+  useInitPage({ logoutRequered: true });
 
   const handleClick = () => setShow(!show);
   const login = async () => {

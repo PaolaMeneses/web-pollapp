@@ -1,6 +1,8 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import { useCurrentUserMutation } from "./api/auth";
 import Layout from "./components/Layout";
-import RouteAuth from "./components/RouteAuth";
+import PageLogOutRequired from "./components/PageLogoutRequired";
+import PageProtected from "./components/PageProtected";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Matches from "./pages/Matches";
@@ -19,35 +21,36 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: (
-          <RouteAuth pageOpts={{ headerText: "Inicio" }}>
+          <PageProtected pageOpts={{ headerText: "Inicio" }}>
             <Home />
-          </RouteAuth>
+          </PageProtected>
         ),
-        children: [],
       },
       {
         path: "/matches",
         element: (
-          <RouteAuth pageOpts={{ headerText: "Partidos" }}>
+          <PageProtected pageOpts={{ headerText: "Partidos" }}>
             <Matches />
-          </RouteAuth>
+          </PageProtected>
         ),
-        children: [],
       },
       {
         path: "/positions",
         element: (
-          <RouteAuth pageOpts={{ headerText: "Posiciones" }}>
+          <PageProtected pageOpts={{ headerText: "Posiciones" }}>
             <Positions />
-          </RouteAuth>
+          </PageProtected>
         ),
-        children: [],
       },
     ],
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <PageLogOutRequired>
+        <Login />
+      </PageLogOutRequired>
+    ),
   },
 ]);
 

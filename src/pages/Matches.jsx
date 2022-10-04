@@ -18,10 +18,10 @@ import {
 import UpcomingMatch from "../components/UpcomingMatch";
 import PreviousMatch from "../components/PreviousMatch";
 
-import { getMatches, getPreviousMatches } from "../services/matches";
+import { getMatches, getPreviousMatches } from "../api/matches";
 
 function Matches() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [matches, setMatches] = useState([]);
   const [previousMatches, setPreviousMatches] = useState([]);
 
