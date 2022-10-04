@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { Provider } from "react-redux";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
 import { store } from "./store/index.jsx";
 import router from "./router.jsx";
@@ -13,7 +13,7 @@ const colors = {
     // 100: "#fff",
     // 200: "#fff",
     // 300: "#fff",
-    // 400: "#fff",
+    400: "#a41936",
     500: "#850f32",
     600: "#48001c",
     700: "#2e0012",

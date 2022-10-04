@@ -1,18 +1,34 @@
 [
   {
     "name": "Qatar",
-    "img": "Qatar.png"
+    "img": "https://proyectoviajero.com/wp-content/uploads/2021/03/Bandera-de-Catar.svg"
   },
   {
     "name": "Ecuador",
-    "img": "Ecuador.png"
+    "img": "https://proyectoviajero.com/wp-content/uploads/2021/03/Bandera-de-Ecuador.svg"
   },
   {
     "name": "Senegal",
-    "img": "Senegal.png"
+    "img": "https://proyectoviajero.com/wp-content/uploads/2021/03/Bandera-de-Senegal.svg"
   },
   {
     "name": "Paises Bajos",
+    "img": "https://proyectoviajero.com/wp-content/uploads/2021/03/Bandera-de-Paises-Bajos.svg"
+  },
+  {
+    "name": "Inglaterra",
+    "img": "Qatar.png"
+  },
+  {
+    "name": "Irán",
+    "img": "Ecuador.png"
+  },
+  {
+    "name": "Estados Unidos",
+    "img": "Senegal.png"
+  },
+  {
+    "name": "Gales",
     "img": "Paises_Bajos.png"
   }
 ]

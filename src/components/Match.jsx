@@ -22,7 +22,7 @@ function MatchTeam(props) {
       // style={{ border: ".5px solid red" }}
       >
         <Box shadow="xl" mb={2}>
-          <Image src={`./img/teams/${team.img}`} alt="" />
+          <Image src={`${team.img}`} alt="" />
         </Box>
         <Text fontSize={{ base: "lg" }} as="b">
           {team.name}

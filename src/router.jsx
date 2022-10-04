@@ -1,6 +1,8 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import App from "./App";
 import Layout from "./components/Layout";
+import RouteAuth from "./components/RouteAuth";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 import Matches from "./pages/Matches";
 import Positions from "./pages/Positions";
 
@@ -16,21 +18,36 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <App />,
+        element: (
+          <RouteAuth pageOpts={{ headerText: "Inicio" }}>
+            <Home />
+          </RouteAuth>
+        ),
         children: [],
       },
       {
         path: "/matches",
-        header: "aa",
-        element: <Matches />,
+        element: (
+          <RouteAuth pageOpts={{ headerText: "Partidos" }}>
+            <Matches />
+          </RouteAuth>
+        ),
         children: [],
       },
       {
         path: "/positions",
-        element: <Positions />,
+        element: (
+          <RouteAuth pageOpts={{ headerText: "Posiciones" }}>
+            <Positions />
+          </RouteAuth>
+        ),
         children: [],
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 

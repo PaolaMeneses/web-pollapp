@@ -10,7 +10,6 @@ export const appSlice = createSlice({
   initialState,
   reducers: {
     setAppConfig(state, action) {
-      // console.log(state, action);
       return { ...state, ...action.payload };
     },
   },

@@ -8,11 +8,20 @@ import {
   Slide,
   Text,
   Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuGroup,
+  MenuItem,
+  MenuDivider,
+  Button,
 } from "@chakra-ui/react";
-import { HamburgerIcon, SmallCloseIcon } from "@chakra-ui/icons";
-import { NavLink } from "react-router-dom";
+import { ChevronUpIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import { NavLink, useNavigate } from "react-router-dom";
 import { GiSoccerBall, GiStairsGoal } from "react-icons/gi";
 import { setAppConfig } from "../store/app";
+import { logout } from "../store/auth";
+import { HiOutlineViewGrid } from "react-icons/hi";
 
 const routes = [
   {
@@ -37,7 +46,13 @@ const routes = [
 
 const Nav = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { showMenu } = useSelector((state) => state.app);
+
+  const userLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <Box
@@ -51,9 +66,26 @@ const Nav = () => {
     >
       <Container>
         <Flex justifyContent="space-between" alignItems="center" h="3rem">
-          <Text fontSize={20} as="b">
-            Admin
-          </Text>
+          <Menu>
+            <MenuButton as={Button} rightIcon={<ChevronUpIcon />} bg="white">
+              <Text fontSize={20} as="b">
+                Andrés Posada
+              </Text>
+            </MenuButton>
+            <MenuList>
+              <MenuGroup title="Perfil">
+                <MenuItem>Mi cuenta</MenuItem>
+                <MenuItem>Soporte de pagos</MenuItem>
+              </MenuGroup>
+              <MenuDivider />
+              <MenuItem onClick={userLogout}>
+                <Text color="red.600">Cerrar sesión</Text>
+              </MenuItem>
+              {/* <MenuGroup title="Help">
+                <MenuItem>FAQ</MenuItem>
+              </MenuGroup> */}
+            </MenuList>
+          </Menu>
           {/* <Slide direction="bottom" in={toggleMenu}> */}
           <Box w="100%" position="fixed" left={0}>
             <Slide direction="bottom" in={showMenu} style={{ zIndex: 10 }}>
@@ -119,7 +151,8 @@ const Nav = () => {
           </Box>
           {/* </Slide> */}
           <Flex alignItems="center">
-            <HamburgerIcon
+            <Icon
+              as={HiOutlineViewGrid}
               fontSize={"3xl"}
               onClick={() => dispatch(setAppConfig({ showMenu: true }))}
             />
