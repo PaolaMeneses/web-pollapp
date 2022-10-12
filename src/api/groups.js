@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "../config";
 
-export const authApi = createApi({
-  reducerPath: "authApi",
+export const groupsApi = createApi({
+  reducerPath: "groupsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${API_URL}/auth`,
+    baseUrl: `${API_URL}/groups`,
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
 
@@ -16,15 +16,19 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    currentUser: builder.mutation({
-      query: () => "/current_user",
+    groupList: builder.query({
+      query: (code) => {
+        return {
+          url: "/search",
+          params: { code },
+        };
+      },
+      transformResponse: ({ data }) => {
+        return data;
+      },
     }),
-    login: builder.mutation({
-      query: (auth) => ({
-        url: "/login",
-        method: "post",
-        body: auth,
-      }),
+    groupById: builder.query({
+      query: (groupId) => `/${groupId}`,
       transformResponse: ({ data }) => {
         return data;
       },
@@ -32,4 +36,5 @@ export const authApi = createApi({
   }),
 });
 
-export const { useCurrentUserMutation, useLoginMutation } = authApi;
+export const { useGroupListQuery, useLazyGroupListQuery, useGroupByIdQuery } =
+  groupsApi;

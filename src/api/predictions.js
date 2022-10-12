@@ -1,10 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "../config";
 
-export const authApi = createApi({
-  reducerPath: "authApi",
+export const predictionsApi = createApi({
+  reducerPath: "predictionsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${API_URL}/auth`,
+    baseUrl: `${API_URL}/predictions`,
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
 
@@ -16,14 +16,11 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    currentUser: builder.mutation({
-      query: () => "/current_user",
-    }),
-    login: builder.mutation({
-      query: (auth) => ({
-        url: "/login",
-        method: "post",
-        body: auth,
+    updatePredictionGoals: builder.mutation({
+      query: ({ predictionId, payload }) => ({
+        url: `/${predictionId}`,
+        method: "PATCH",
+        body: payload,
       }),
       transformResponse: ({ data }) => {
         return data;
@@ -32,4 +29,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useCurrentUserMutation, useLoginMutation } = authApi;
+export const { useUpdatePredictionGoalsMutation } = predictionsApi;

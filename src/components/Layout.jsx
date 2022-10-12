@@ -9,7 +9,7 @@ const Layout = ({ children, headerText }) => {
     <>
       <Nav />
       <Header headerText={headerText} />
-      <Container>{children}</Container>
+      <Container marginBottom="3rem">{children}</Container>
     </>
   );
 };

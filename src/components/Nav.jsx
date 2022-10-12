@@ -51,7 +51,7 @@ const Nav = () => {
 
   const userLogout = () => {
     dispatch(logout());
-    navigate("/login");
+    // navigate("/login");
   };
 
   return (

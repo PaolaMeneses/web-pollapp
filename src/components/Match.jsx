@@ -12,17 +12,17 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
 
 function MatchTeam(props) {
   const { team } = props;
-
   return (
     <>
       <Box
       // style={{ border: ".5px solid red" }}
       >
         <Box shadow="xl" mb={2}>
-          <Image src={`${team.img}`} alt="" />
+          <Image src={`${team.flag}`} alt="" />
         </Box>
         <Text fontSize={{ base: "lg" }} as="b">
           {team.name}
@@ -40,6 +40,9 @@ function Match(props) {
     showMatchPoints,
     handlerLocalPrediction = {},
     handlerVisitorPrediction = {},
+    handlerUpdatePrediction,
+    updatePredictionLoading,
+    updatePredictionDisabled,
   } = props;
   const { localMinusGoal, localAddGoal } = handlerLocalPrediction;
   const { visitorMinusGoal, visitorAddGoal } = handlerVisitorPrediction;
@@ -54,23 +57,23 @@ function Match(props) {
         // style={{ border: ".5px solid red" }}
       >
         <Box px={3} pb={1} borderTop="red">
-          <Grid templateColumns="repeat(4, 1fr)">
+          <Grid templateColumns="repeat(5, 1fr)">
             <Spacer />
             <GridItem
               bg="brand.500"
               mb={1}
               borderBottomStartRadius="full"
               borderBottomEndRadius="full"
-              colSpan={2}
+              colSpan={3}
             >
               <Text color="#fff" fontSize="xs" height="18px">
-                {`FASE GRUPOS GRUPO A`}
+                {match.phase.toUpperCase()}
               </Text>
             </GridItem>
             <Spacer />
           </Grid>
           <Grid templateColumns="repeat(3, 1fr)" gap={1}>
-            <MatchTeam team={match.local} />
+            <MatchTeam team={match.localTeam} />
             <Grid
               templateRows="repeat(4, 1fr)"
               // style={{ border: ".5px solid red" }}
@@ -85,9 +88,12 @@ function Match(props) {
                     h="100%"
                   >
                     <Text as="b" fontSize="lg">
-                      {match.date}
+                      {dayjs(match.date).format("DD/MM")}
                     </Text>
-                    <Text fontSize="md">{match.time}</Text>
+                    <Text fontSize="md">
+                      {" "}
+                      {dayjs(match.date).format("HH:mm")}
+                    </Text>
                   </Flex>
                 ) : (
                   <Text fontSize={{ base: "40px" }}>
@@ -106,7 +112,7 @@ function Match(props) {
                 } - ${match.visitorGoalPrediction ?? ""}`}</Text>
               </GridItem>
             </Grid>
-            <MatchTeam team={match.visitor} />
+            <MatchTeam team={match.visitorTeam} />
           </Grid>
           {showPredictionBtns && (
             <Grid templateColumns="repeat(3, 1fr)" mb={3}>
@@ -153,10 +159,7 @@ function Match(props) {
             // style={{ border: ".5px solid red" }}
             colorScheme="brand"
             color="#fff"
-            disabled={
-              match.localGoalPrediction === null ||
-              match.visitorGoalPrediction === null
-            }
+            disabled={updatePredictionDisabled}
             _focus={{ backgroundColor: "brand.500" }}
             w="100%"
             h={10}
@@ -164,6 +167,8 @@ function Match(props) {
             borderRadius={0}
             borderBottomStartRadius="lg"
             borderBottomEndRadius="lg"
+            onClick={handlerUpdatePrediction}
+            isLoading={updatePredictionLoading}
           >
             GUARDAR PREDICCIÓN
           </Button>

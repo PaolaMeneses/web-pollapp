@@ -1,8 +1,9 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import { useCurrentUserMutation } from "./api/auth";
+import BoardProtected from "./components/BoardProtected";
 import Layout from "./components/Layout";
 import PageLogOutRequired from "./components/PageLogoutRequired";
 import PageProtected from "./components/PageProtected";
+import Board from "./pages/Board";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Matches from "./pages/Matches";
@@ -33,6 +34,22 @@ const router = createBrowserRouter([
             <Matches />
           </PageProtected>
         ),
+      },
+      {
+        path: "/board/:boardId",
+        element: (
+          <PageProtected pageOpts={{ headerText: "Board" }}>
+            <BoardProtected>
+              <Outlet />
+            </BoardProtected>
+          </PageProtected>
+        ),
+        children: [
+          {
+            path: "",
+            element: <Board />,
+          },
+        ],
       },
       {
         path: "/positions",

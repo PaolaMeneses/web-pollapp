@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_URL } from "../config";
 
-export const authApi = createApi({
-  reducerPath: "authApi",
+export const boardsApi = createApi({
+  reducerPath: "boardApi",
+  tagTypes: ["Board"],
   baseQuery: fetchBaseQuery({
-    baseUrl: `${API_URL}/auth`,
+    baseUrl: `${API_URL}/boards`,
     prepareHeaders: (headers, { getState }) => {
       const token = getState().auth.token;
 
@@ -16,15 +17,15 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    currentUser: builder.mutation({
-      query: () => "/current_user",
+    validateBoard: builder.query({
+      query: (boardId) => `/${boardId}`,
+      transformResponse: ({ data }) => {
+        return data;
+      },
+      providesTags: ["Board"],
     }),
-    login: builder.mutation({
-      query: (auth) => ({
-        url: "/login",
-        method: "post",
-        body: auth,
-      }),
+    getBoardActiveDetail: builder.query({
+      query: (boardId) => `/${boardId}/matches/active`,
       transformResponse: ({ data }) => {
         return data;
       },
@@ -32,4 +33,5 @@ export const authApi = createApi({
   }),
 });
 
-export const { useCurrentUserMutation, useLoginMutation } = authApi;
+export const { useValidateBoardQuery, useGetBoardActiveDetailQuery } =
+  boardsApi;
