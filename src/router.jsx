@@ -1,8 +1,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import BoardHeader from "./components/BoardHeader";
 import BoardProtected from "./components/BoardProtected";
 import Layout from "./components/Layout";
-import PageLogOutRequired from "./components/PageLogoutRequired";
+import PageLogOutRequired from "./components/PageLogOutRequired";
 import PageProtected from "./components/PageProtected";
 import Board from "./pages/Board";
 import Groups from "./pages/Groups";
