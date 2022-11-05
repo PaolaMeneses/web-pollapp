@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Center,
@@ -11,36 +11,76 @@ import {
   StatArrow,
   StatHelpText,
   Text,
+  VStack,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+
 import { useGroupByIdQuery } from "../api/groups";
 import { boardsApi } from "../api/board";
 
 const BoardHeader = () => {
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const { data: { group_id, _id, number } = {} } = useSelector(
-    boardsApi.endpoints.validateBoard.select(boardId)
-  );
+  const {
+    data: {
+      group_id,
+      _id,
+      number,
+      current_pos,
+      previous_pos,
+      totalPoints,
+    } = {},
+  } = useSelector(boardsApi.endpoints.validateBoard.select(boardId));
+
   const { data: group, isLoading } = useGroupByIdQuery(group_id);
 
   return (
-    <Flex alignItems="center">
-      <Box>
+    <VStack alignItems="space-between">
+      <Flex justifyContent="space-between">
         <Text as="b" fontSize="lg">
-          Tabla N° {number}
+          {group?.name}
         </Text>
-        {isLoading ? (
-          <Center>
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="brand.500"
-              size="xl"
-            />
-          </Center>
-        ) : (
-          group?.active?.length > 0 && (
+
+        <Menu>
+          <MenuButton
+            style={{ margin: 0 }}
+            aria-label="options"
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+          >
+            Menu
+          </MenuButton>
+          <MenuList>
+            <NavLink to={`/board/${_id}`}>
+              <MenuItem>Tabla de predicciones</MenuItem>
+            </NavLink>
+            <NavLink to={`/board/${_id}/positions`}>
+              <MenuItem>Posiciones</MenuItem>
+            </NavLink>
+          </MenuList>
+        </Menu>
+      </Flex>
+      <Flex alignItems="center">
+        <Box>
+          <Text as="b" fontSize="lg">
+            Tabla N°
+          </Text>
+          {isLoading ? (
+            <Center>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="brand.500"
+                size="xl"
+              />
+            </Center>
+          ) : group?.active?.length > 1 ? (
             <Select
               defaultValue={_id}
               onChange={(e) => {
@@ -54,33 +94,39 @@ const BoardHeader = () => {
                 </option>
               ))}
             </Select>
-          )
-        )}
-        {/* <Text>119</Text> */}
-      </Box>
-      <Stat>
-        <Flex
-          // style={{ border: ".5px solid red" }}
-          alignItems="flex-end"
-          flexDirection="column"
-        >
+          ) : group?.active.length ? (
+            <Text>{group?.active?.[0].number}</Text>
+          ) : null}
+          {/* <Text>119</Text> */}
+        </Box>
+        <Stat>
           <Flex
-            alignItems="center"
-            // justifyContent="space-around"
             // style={{ border: ".5px solid red" }}
+            alignItems="flex-end"
+            flexDirection="column"
           >
-            <Text verticalAlign="baseline" as="b" fontSize="2xl">
-              9
-            </Text>
-            <Text ml={2}>Puntos</Text>
+            <Flex
+              alignItems="center"
+              // justifyContent="space-around"
+              // style={{ border: ".5px solid red" }}
+            >
+              <Text verticalAlign="baseline" as="b" fontSize="2xl">
+                {totalPoints}
+              </Text>
+              <Text ml={2}>Puntos</Text>
+            </Flex>
+            <StatHelpText fontSize="md">
+              {current_pos && previous_pos && current_pos !== previous_pos && (
+                <StatArrow
+                  type={previous_pos > current_pos ? "increase" : "decrease"}
+                />
+              )}
+              {current_pos ? "pos" : ""} {current_pos}
+            </StatHelpText>
           </Flex>
-          <StatHelpText fontSize="md">
-            <StatArrow type="increase" />
-            pos 3
-          </StatHelpText>
-        </Flex>
-      </Stat>
-    </Flex>
+        </Stat>
+      </Flex>
+    </VStack>
   );
 };
 

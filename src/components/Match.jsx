@@ -1,5 +1,5 @@
 import React from "react";
-import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { AddIcon, ArrowRightIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -9,10 +9,12 @@ import {
   GridItem,
   IconButton,
   Image,
+  Link,
   Spacer,
   Text,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
+import { NavLink, useParams } from "react-router-dom";
 
 function MatchTeam(props) {
   const { team } = props;
@@ -46,6 +48,8 @@ function Match(props) {
   } = props;
   const { localMinusGoal, localAddGoal } = handlerLocalPrediction;
   const { visitorMinusGoal, visitorAddGoal } = handlerVisitorPrediction;
+
+  const { boardId } = useParams();
 
   return (
     <>
@@ -152,6 +156,23 @@ function Match(props) {
                 />
               </Flex>
             </Grid>
+          )}
+          {match.isClosed && (
+            <Flex
+              justify="center"
+              alignItems="center"
+              color="brand.500"
+              mb="10px"
+            >
+              <Link
+                as={NavLink}
+                color="brand.500"
+                to={`/board/${boardId}/match/${match._id}`}
+              >
+                Ver detalle
+                <ArrowRightIcon mx="4px" />
+              </Link>
+            </Flex>
           )}
         </Box>
         {showPredictionBtns && (

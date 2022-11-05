@@ -22,7 +22,6 @@ export const boardsApi = createApi({
       transformResponse: ({ data }) => {
         return data;
       },
-      providesTags: ["Board"],
     }),
     getBoardActiveDetail: builder.query({
       query: (boardId) => `/${boardId}/matches/active`,
@@ -30,8 +29,38 @@ export const boardsApi = createApi({
         return data;
       },
     }),
+    getBoardClosedDetail: builder.query({
+      query: (boardId) => `/${boardId}/matches/closed`,
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
+    requestABoard: builder.mutation({
+      query: (payload) => ({
+        url: `/`,
+        method: "POST",
+        body: payload,
+      }),
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
+    activateBoard: builder.mutation({
+      query: (boardId) => ({
+        url: `/${boardId}/activate`,
+        method: "POST",
+      }),
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
   }),
 });
 
-export const { useValidateBoardQuery, useGetBoardActiveDetailQuery } =
-  boardsApi;
+export const {
+  useValidateBoardQuery,
+  useGetBoardActiveDetailQuery,
+  useGetBoardClosedDetailQuery,
+  useRequestABoardMutation,
+  useActivateBoardMutation,
+} = boardsApi;

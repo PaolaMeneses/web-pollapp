@@ -13,7 +13,10 @@ import {
 import UpcomingMatch from "../components/UpcomingMatch";
 import PreviousMatch from "../components/PreviousMatch";
 
-import { useGetBoardActiveDetailQuery } from "../api/board";
+import {
+  useGetBoardActiveDetailQuery,
+  useGetBoardClosedDetailQuery,
+} from "../api/board";
 
 function Board() {
   const { boardId } = useParams();
@@ -23,8 +26,15 @@ function Board() {
     isLoading: upcoingMatchesLoading,
     isFetching: upcoingMatchesFetching,
   } = useGetBoardActiveDetailQuery(boardId);
+
+  const {
+    data: previousBoardMatches,
+    isLoading: previousBoardMatchesLoading,
+    isFetching: previousBoardMatchesFetching,
+  } = useGetBoardClosedDetailQuery(boardId);
+
   const { predictions: upcoingMatches } = data || {};
-  console.log("upcoingMatchesLoading", upcoingMatchesLoading);
+  const { predictions: previousMatches } = previousBoardMatches || {};
   return (
     <>
       <Tabs colorScheme="brand" isFitted>
@@ -49,15 +59,27 @@ function Board() {
                 />
               </Center>
             ) : (
-              upcoingMatches.map((pred) => (
+              (upcoingMatches || []).map((pred) => (
                 <UpcomingMatch key={pred._id} pred={pred} />
               ))
             )}
           </TabPanel>
           <TabPanel>
-            {/* {previousMatches.map((match) => (
-              <PreviousMatch key={match.id} match={match} />
-            ))} */}
+            {previousBoardMatchesLoading || previousBoardMatchesFetching ? (
+              <Center>
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="brand.500"
+                  size="xl"
+                />
+              </Center>
+            ) : (
+              (previousMatches || []).map((pred) => (
+                <PreviousMatch key={pred._id} pred={pred} />
+              ))
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>

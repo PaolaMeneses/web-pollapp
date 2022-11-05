@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -17,11 +17,15 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { ChevronUpIcon, SmallCloseIcon } from "@chakra-ui/icons";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { GiSoccerBall, GiStairsGoal } from "react-icons/gi";
 import { setAppConfig } from "../store/app";
 import { logout } from "../store/auth";
-import { HiOutlineViewGrid } from "react-icons/hi";
+import {
+  HiOutlineLogout,
+  HiOutlineViewGrid,
+  HiUserGroup,
+} from "react-icons/hi";
 
 const routes = [
   {
@@ -32,26 +36,37 @@ const routes = [
   },
   {
     id: 2,
+    path: "/groups",
+    name: "Grupos",
+    icon: HiUserGroup,
+  },
+  {
+    id: 3,
     path: "/matches",
     name: "Partidos",
     icon: GiSoccerBall,
   },
   {
-    id: 3,
+    id: 4,
     path: "/positions",
     name: "Posiciones",
     icon: GiStairsGoal,
+  },
+  {
+    id: 5,
+    name: "Salir",
+    icon: HiOutlineLogout,
   },
 ];
 
 const Nav = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { showMenu } = useSelector((state) => state.app);
+  const { user } = useSelector((state) => state.auth);
+  const { firstname, lastname } = user || {};
 
   const userLogout = () => {
     dispatch(logout());
-    // navigate("/login");
   };
 
   return (
@@ -66,27 +81,10 @@ const Nav = () => {
     >
       <Container>
         <Flex justifyContent="space-between" alignItems="center" h="3rem">
-          <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronUpIcon />} bg="white">
-              <Text fontSize={20} as="b">
-                Andrés Posada
-              </Text>
-            </MenuButton>
-            <MenuList>
-              <MenuGroup title="Perfil">
-                <MenuItem>Mi cuenta</MenuItem>
-                <MenuItem>Soporte de pagos</MenuItem>
-              </MenuGroup>
-              <MenuDivider />
-              <MenuItem onClick={userLogout}>
-                <Text color="red.600">Cerrar sesión</Text>
-              </MenuItem>
-              {/* <MenuGroup title="Help">
-                <MenuItem>FAQ</MenuItem>
-              </MenuGroup> */}
-            </MenuList>
-          </Menu>
-          {/* <Slide direction="bottom" in={toggleMenu}> */}
+          <Text fontSize={20} as="b">
+            {firstname?.charAt(0)?.toUpperCase() + firstname?.slice(1)}{" "}
+            {lastname?.charAt(0)?.toUpperCase() + lastname?.slice(1)}
+          </Text>
           <Box w="100%" position="fixed" left={0}>
             <Slide direction="bottom" in={showMenu} style={{ zIndex: 10 }}>
               <Box
@@ -105,21 +103,33 @@ const Nav = () => {
                 >
                   {routes.map((route) => (
                     <Box key={route.id}>
-                      <NavLink
-                        end
-                        // onClick={() => goToPath(route.path)}
-                        to={`${route.path}`}
-                        style={(props) => {
-                          const { isActive } = props;
-                          return isActive
-                            ? {
-                                fontWeight: "bold",
-                                color: "#850f32",
-                              }
-                            : undefined;
-                        }}
-                      >
+                      {"path" in route ? (
+                        <NavLink
+                          end
+                          // onClick={() => goToPath(route.path)}
+                          to={`${route.path}`}
+                          style={(props) => {
+                            const { isActive } = props;
+                            return isActive
+                              ? {
+                                  fontWeight: "bold",
+                                  color: "#850f32",
+                                }
+                              : undefined;
+                          }}
+                        >
+                          <Box
+                            display="flex"
+                            flexDirection="column"
+                            alignItems="center"
+                          >
+                            <Icon as={route.icon} fontSize="1.2rem" />
+                            {route.name}
+                          </Box>
+                        </NavLink>
+                      ) : (
                         <Box
+                          onClick={userLogout}
                           display="flex"
                           flexDirection="column"
                           alignItems="center"
@@ -127,7 +137,7 @@ const Nav = () => {
                           <Icon as={route.icon} fontSize="1.2rem" />
                           {route.name}
                         </Box>
-                      </NavLink>
+                      )}
                     </Box>
                   ))}
                 </Grid>

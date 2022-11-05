@@ -27,8 +27,36 @@ export const groupsApi = createApi({
         return data;
       },
     }),
+    allGroupList: builder.query({
+      query: () => {
+        return {
+          url: "/",
+        };
+      },
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
     groupById: builder.query({
       query: (groupId) => `/${groupId}`,
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
+    getPositionsByGroup: builder.query({
+      query: (groupId) => `/${groupId}/positions`,
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
+    createGroup: builder.mutation({
+      query: (payload) => {
+        return {
+          method: "POST",
+          url: "/",
+          body: payload,
+        };
+      },
       transformResponse: ({ data }) => {
         return data;
       },
@@ -36,5 +64,11 @@ export const groupsApi = createApi({
   }),
 });
 
-export const { useGroupListQuery, useLazyGroupListQuery, useGroupByIdQuery } =
-  groupsApi;
+export const {
+  useGroupListQuery,
+  useLazyGroupListQuery,
+  useGroupByIdQuery,
+  useAllGroupListQuery,
+  useGetPositionsByGroupQuery,
+  useCreateGroupMutation,
+} = groupsApi;

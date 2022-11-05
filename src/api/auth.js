@@ -29,7 +29,18 @@ export const authApi = createApi({
         return data;
       },
     }),
+    register: builder.mutation({
+      query: (payload) => ({
+        url: "/",
+        method: "post",
+        body: payload,
+      }),
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
   }),
 });
 
-export const { useCurrentUserMutation, useLoginMutation } = authApi;
+export const { useCurrentUserMutation, useLoginMutation, useRegisterMutation } =
+  authApi;

@@ -5,7 +5,7 @@ import { Center, Spinner } from "@chakra-ui/react";
 import { useValidateBoardQuery } from "../api/board";
 import BoardHeader from "./BoardHeader";
 
-const BoardProtected = () => {
+const BoardProtected = ({ children, showBoardHeader = true }) => {
   const { boardId } = useParams();
   const {
     data: { _id } = {},
@@ -34,8 +34,8 @@ const BoardProtected = () => {
 
   return (
     <>
-      <BoardHeader />
-      <Outlet />
+      {showBoardHeader && <BoardHeader />}
+      {children}
     </>
   );
 };

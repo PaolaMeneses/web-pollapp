@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { authApi } from "../api/auth";
 import { boardsApi } from "../api/board";
 import { groupsApi } from "../api/groups";
+import { matchesApi } from "../api/matches";
 import { predictionsApi } from "../api/predictions";
 
 import appSlice from "./app";
@@ -16,13 +17,15 @@ export const store = configureStore({
     [groupsApi.reducerPath]: groupsApi.reducer,
     [boardsApi.reducerPath]: boardsApi.reducer,
     [predictionsApi.reducerPath]: predictionsApi.reducer,
+    [matchesApi.reducerPath]: matchesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       authApi.middleware,
       groupsApi.middleware,
       boardsApi.middleware,
-      predictionsApi.middleware
+      predictionsApi.middleware,
+      matchesApi.middleware
     ),
 });
 

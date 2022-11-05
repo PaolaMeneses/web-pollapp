@@ -30,6 +30,13 @@ export const authSlice = createSlice({
         return { ...state, ...payload };
       }
     );
+    builder.addMatcher(
+      authApi.endpoints.register.matchFulfilled,
+      (state, { payload }) => {
+        localStorage.setItem(sliceName, JSON.stringify(payload));
+        return { ...state, ...payload };
+      }
+    );
   },
 });
 

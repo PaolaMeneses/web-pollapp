@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const { headerText } = useSelector((state) => state.app);
 
-  if (headerText === false) {
+  if (headerText === null || headerText === false) {
     return;
   }
 
@@ -20,7 +20,7 @@ const Header = () => {
       borderBottomStartRadius="full"
       borderBottomEndRadius="full"
     >
-      <Text as="b">{headerText.toUpperCase()}</Text>
+      <Text as="b">{headerText?.toUpperCase()}</Text>
     </Box>
   );
 };
