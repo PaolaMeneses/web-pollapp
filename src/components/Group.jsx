@@ -5,7 +5,10 @@ import { ArrowRightIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Center,
   Flex,
+  Grid,
+  GridItem,
   Heading,
   HStack,
   Image,
@@ -63,34 +66,47 @@ const Group = ({ group }) => {
         </HStack>
         {(group.active || []).length > 0 && (
           <VStack align="flex-start" mt={4}>
-            <Flex>
-              <Text as="b" fontSize="lg">
-                Tabla N°
-              </Text>
-            </Flex>
-            <Flex justifyContent="space-between" align="center" w="100%">
-              <Box>
-                <Select
-                  onChange={(e) => {
-                    console.log(e);
-                    setBoard(e.target.value);
-                  }}
-                  value={board}
+            <Grid templateColumns="repeat(5, 1fr)" w="100%">
+              <GridItem colSpan={2} textAlign="center">
+                <Text as="b" fontSize="lg">
+                  Tabla N°
+                </Text>
+              </GridItem>
+              <GridItem colSpan={3}></GridItem>
+              <GridItem colSpan={2}>
+                {(group.active || []).length === 1 ? (
+                  <Center>
+                    <Text>{group.active[0].number}</Text>
+                  </Center>
+                ) : (
+                  <Select
+                    onChange={(e) => {
+                      setBoard(e.target.value);
+                    }}
+                    value={board}
+                  >
+                    {group.active.map((boardActive) => (
+                      <option key={boardActive._id} value={boardActive._id}>
+                        {boardActive.number}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+              </GridItem>
+              <GridItem colSpan={3} width="100%">
+                <Flex
+                  alignItems="center"
+                  h="100%"
+                  justifyContent="flex-end"
+                  textAlign="right"
                 >
-                  {group.active.map((boardActive) => (
-                    <option key={boardActive._id} value={boardActive._id}>
-                      {boardActive.number}
-                    </option>
-                  ))}
-                </Select>
-              </Box>
-              <Box>
-                <NavLink color="brand.500" to={`/board/${board}`}>
-                  Ver tabla de predicciones
-                </NavLink>
-                <ArrowRightIcon mx="4px" />
-              </Box>
-            </Flex>
+                  <NavLink color="brand.500" to={`/board/${board}`}>
+                    Ver tabla de predicciones
+                  </NavLink>
+                  <ArrowRightIcon ml="8px" />
+                </Flex>
+              </GridItem>
+            </Grid>
           </VStack>
         )}
         {group.pending === 0 && (

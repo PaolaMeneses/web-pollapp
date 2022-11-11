@@ -35,6 +35,7 @@ function Board() {
 
   const { predictions: upcoingMatches } = data || {};
   const { predictions: previousMatches } = previousBoardMatches || {};
+
   return (
     <>
       <Tabs colorScheme="brand" isFitted>
@@ -58,6 +59,10 @@ function Board() {
                   size="xl"
                 />
               </Center>
+            ) : (upcoingMatches || []).length === 0 ? (
+              <Center>
+                <Text>No hay partidos próximos</Text>
+              </Center>
             ) : (
               (upcoingMatches || []).map((pred) => (
                 <UpcomingMatch key={pred._id} pred={pred} />
@@ -74,6 +79,10 @@ function Board() {
                   color="brand.500"
                   size="xl"
                 />
+              </Center>
+            ) : (previousMatches || []).length === 0 ? (
+              <Center>
+                <Text>No hay partidos anteriores</Text>
               </Center>
             ) : (
               (previousMatches || []).map((pred) => (

@@ -98,7 +98,7 @@ const MatchDetail = () => {
                         }}
                       >
                         <Td>{pred.localGoalPrediction ?? "-"}</Td>
-                        <Td>{pred.localGoalPrediction ?? "-"}</Td>
+                        <Td>{pred.visitorGoalPrediction ?? "-"}</Td>
                         <Td>
                           {pred.board.number} - {pred.board.user.firstname}{" "}
                           {pred.board.user.lastname}

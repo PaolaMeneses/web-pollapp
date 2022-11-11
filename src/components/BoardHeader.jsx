@@ -95,7 +95,7 @@ const BoardHeader = () => {
               ))}
             </Select>
           ) : group?.active.length ? (
-            <Text>{group?.active?.[0].number}</Text>
+            <Text textAlign="center">{group?.active?.[0].number}</Text>
           ) : null}
           {/* <Text>119</Text> */}
         </Box>

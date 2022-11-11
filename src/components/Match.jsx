@@ -70,7 +70,7 @@ function Match(props) {
               borderBottomEndRadius="full"
               colSpan={3}
             >
-              <Text color="#fff" fontSize="xs" height="18px">
+              <Text color="#fff" fontSize={{ base: "10px", sm: "35px" }}>
                 {match.phase.toUpperCase()}
               </Text>
             </GridItem>
@@ -100,7 +100,7 @@ function Match(props) {
                     </Text>
                   </Flex>
                 ) : (
-                  <Text fontSize={{ base: "40px" }}>
+                  <Text fontSize={{ base: "35px" }}>
                     {`${match.localGoals ?? ""} - ${match.visitorGoals ?? ""}`}
                   </Text>
                 )}
