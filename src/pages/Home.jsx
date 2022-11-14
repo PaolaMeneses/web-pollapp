@@ -14,7 +14,7 @@ import Group from "../components/Group";
 
 const Home = () => {
   const [previousCode, setPreviousCode] = useState("");
-  const [code, setCode] = useState("Iq7zRx");
+  const [code, setCode] = useState("");
 
   const [triggerGroups, { data: groups, isLoading }] = useLazyGroupListQuery();
 
@@ -28,7 +28,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!code) {
-      triggerGroups();
+      triggerGroups("Iq7zRx");
       setPreviousCode(code);
     }
   }, [code]);

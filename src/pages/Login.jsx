@@ -76,7 +76,7 @@ const Login = () => {
                 type="email"
                 bg="#fff"
                 {...register("email", {
-                  value: "andares@qemal.co",
+                  // value: "andares@qemal.co",
                   required: "Falta correo electrónico",
                 })}
               />
@@ -96,7 +96,7 @@ const Login = () => {
                   type={show ? "text" : "password"}
                   bg="#fff"
                   {...register("password", {
-                    value: "123456",
+                    // value: "123456",
                     required: "Falta la constraseña",
                   })}
                 />
