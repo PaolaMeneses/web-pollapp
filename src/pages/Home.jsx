@@ -14,7 +14,7 @@ import Group from "../components/Group";
 
 const Home = () => {
   const [previousCode, setPreviousCode] = useState("");
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState("Iq7zRx");
 
   const [triggerGroups, { data: groups, isLoading }] = useLazyGroupListQuery();
 
