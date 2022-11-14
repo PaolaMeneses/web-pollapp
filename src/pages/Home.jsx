@@ -14,7 +14,7 @@ import Group from "../components/Group";
 
 const Home = () => {
   const [previousCode, setPreviousCode] = useState("");
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState("Iq7zRx");
 
   const [triggerGroups, { data: groups, isLoading }] = useLazyGroupListQuery();
 
@@ -27,15 +27,15 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (!code) {
-      triggerGroups("Iq7zRx");
-      setPreviousCode(code);
-    }
-  }, [code]);
+    // if (!code) {
+    triggerGroups(code);
+    // setPreviousCode(code);
+    // }
+  }, []);
 
   return (
     <>
-      <form onSubmit={getGroupByCode}>
+      {/* <form onSubmit={getGroupByCode}>
         <Flex gap={2}>
           <Input
             borderRadius={25}
@@ -53,7 +53,7 @@ const Home = () => {
             type="submit"
           />
         </Flex>
-      </form>
+      </form> */}
       <Stack spacing={8} mt="20px">
         {isLoading ? (
           <Center>
