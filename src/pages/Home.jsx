@@ -68,7 +68,9 @@ const Home = () => {
         ) : (groups || []).length === 0 ? (
           <Text>No hay grupos</Text>
         ) : (
-          (groups || []).map((group) => <Group key={group._id} group={group} />)
+          (groups || []).map((group) => (
+            <Group key={group._id} group={group} code={code} />
+          ))
         )}
       </Stack>
     </>

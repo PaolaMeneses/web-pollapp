@@ -20,7 +20,7 @@ import {
 import { useRequestABoardMutation } from "../api/board";
 import { groupsApi } from "../api/groups";
 
-const Group = ({ group }) => {
+const Group = ({ group, code }) => {
   const dispatch = useDispatch();
   const { _id: user_id } = useSelector((state) => state.auth.user);
   const [board, setBoard] = useState(group?.active?.[0]?._id);
@@ -29,13 +29,14 @@ const Group = ({ group }) => {
 
   const requestABoard = async (group_id) => {
     const data = await handlerRequestABoard({ group_id, user_id }).unwrap();
+    const param = code || undefined;
     dispatch(
-      groupsApi.util.updateQueryData("groupList", undefined, (groupsDraft) => {
-        groupsDraft.map((group) =>
-          group._id === group_id
-            ? { ...group, pending: (group.pending += 1) }
-            : group
-        );
+      groupsApi.util.updateQueryData("groupList", param, (groupsDraft) => {
+        return groupsDraft.map((group) => {
+          return group._id === group_id
+            ? { ...group, pending: group.pending + 1 }
+            : group;
+        });
       })
     );
     console.log("data :>> ", data);
