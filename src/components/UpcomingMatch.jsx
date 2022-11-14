@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -10,6 +11,7 @@ import Match from "./Match";
 const UpcomingMatch = ({ pred }) => {
   const dispatch = useDispatch();
   const { boardId } = useParams();
+  const toast = useToast();
 
   const [localGoalPrediction, localMinusGoal, localAddGoal] = useGoalPrediction(
     pred.localGoalPrediction ?? null
@@ -21,31 +23,50 @@ const UpcomingMatch = ({ pred }) => {
     useUpdatePredictionGoalsMutation();
 
   const handlerUpdatePrediction = async () => {
-    await updatePredictionGoals({
-      predictionId: pred._id,
-      payload: {
-        localGoalPrediction,
-        visitorGoalPrediction,
-      },
-    }).unwrap();
+    try {
+      await updatePredictionGoals({
+        predictionId: pred._id,
+        payload: {
+          localGoalPrediction,
+          visitorGoalPrediction,
+        },
+      }).unwrap();
 
-    dispatch(
-      boardsApi.util.updateQueryData(
-        "getBoardActiveDetail",
-        boardId,
-        (draftPosts) => {
-          draftPosts.predictions = draftPosts.predictions.map((prediction) =>
-            prediction._id === pred._id
-              ? {
-                  ...prediction,
-                  localGoalPrediction,
-                  visitorGoalPrediction,
-                }
-              : prediction
-          );
-        }
-      )
-    );
+      dispatch(
+        boardsApi.util.updateQueryData(
+          "getBoardActiveDetail",
+          boardId,
+          (draftPosts) => {
+            draftPosts.predictions = draftPosts.predictions.map((prediction) =>
+              prediction._id === pred._id
+                ? {
+                    ...prediction,
+                    localGoalPrediction,
+                    visitorGoalPrediction,
+                  }
+                : prediction
+            );
+          }
+        )
+      );
+
+      toast({
+        position: "top",
+        title: "¡Predicción guardada con exito!",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log("error", error);
+      toast({
+        position: "top",
+        title: error.data.message,
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
   };
   return (
     <Match

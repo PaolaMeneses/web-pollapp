@@ -70,7 +70,7 @@ function Match(props) {
               borderBottomEndRadius="full"
               colSpan={3}
             >
-              <Text color="#fff" fontSize={{ base: "10px", sm: "35px" }}>
+              <Text color="#fff" fontSize={{ base: ".6em" }}>
                 {match.phase.toUpperCase()}
               </Text>
             </GridItem>
@@ -209,7 +209,7 @@ function Match(props) {
               right={-3}
               shadow="lg"
             >
-              <Text fontSize="xl">+0</Text>
+              <Text fontSize="xl">+{match.points}</Text>
             </Circle>
           </Box>
         )}

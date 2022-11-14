@@ -11,6 +11,7 @@ function PreviousMatch({ pred }) {
         ...pred.match,
         localGoalPrediction: pred.localGoalPrediction,
         visitorGoalPrediction: pred.visitorGoalPrediction,
+        points: pred.points,
       }}
     />
   );
