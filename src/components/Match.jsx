@@ -45,12 +45,12 @@ function Match(props) {
     handlerUpdatePrediction,
     updatePredictionLoading,
     updatePredictionDisabled,
+    matchDetail,
   } = props;
   const { localMinusGoal, localAddGoal } = handlerLocalPrediction;
   const { visitorMinusGoal, visitorAddGoal } = handlerVisitorPrediction;
-
   const { boardId } = useParams();
-
+  const allowPred = dayjs(match.date).unix() > dayjs().unix();
   return (
     <>
       <Box
@@ -118,7 +118,7 @@ function Match(props) {
             </Grid>
             <MatchTeam team={match.visitorTeam} />
           </Grid>
-          {showPredictionBtns && (
+          {showPredictionBtns && allowPred && (
             <Grid templateColumns="repeat(3, 1fr)" mb={3}>
               <Flex justifyContent="space-around">
                 <IconButton
@@ -157,7 +157,7 @@ function Match(props) {
               </Flex>
             </Grid>
           )}
-          {match.isClosed && (
+          {(match.isClosed || !allowPred) && !matchDetail && (
             <Flex
               justify="center"
               alignItems="center"
@@ -175,7 +175,7 @@ function Match(props) {
             </Flex>
           )}
         </Box>
-        {showPredictionBtns && (
+        {showPredictionBtns && allowPred && (
           <Button
             // style={{ border: ".5px solid red" }}
             colorScheme="brand"

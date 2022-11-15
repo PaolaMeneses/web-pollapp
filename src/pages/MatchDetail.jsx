@@ -46,7 +46,7 @@ const MatchDetail = () => {
     <>
       {match && (
         <Box mt="15px">
-          <Match match={{ ...match, isClosed: false }} />
+          <Match match={{ ...match, isClosed: false }} matchDetail />
         </Box>
       )}
 
@@ -81,7 +81,7 @@ const MatchDetail = () => {
                     <Tr>
                       <Th>Local</Th>
                       <Th>Visitante</Th>
-                      <Th>Tabla - Nombre</Th>
+                      <Th># Tabla - Nombre</Th>
                     </Tr>
                   </Thead>
                   <Tbody>

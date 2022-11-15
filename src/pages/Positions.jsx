@@ -41,7 +41,7 @@ const Positions = () => {
     boardsApi.endpoints.validateBoard.select(boardId)
   );
   const { data: playerPositions } = useGetPositionsByGroupQuery(group_id);
-  console.log("data :>> ", playerPositions);
+
   return (
     <>
       <TableContainer>
@@ -50,7 +50,7 @@ const Positions = () => {
             <Tr>
               <Th>Pos</Th>
               <Th isNumeric>Puntos</Th>
-              <Th>Nombre</Th>
+              <Th># Tabla - Nombre</Th>
             </Tr>
           </Thead>
           <Tbody>

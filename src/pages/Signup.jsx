@@ -14,6 +14,7 @@ import {
   InputRightElement,
   Link,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 
@@ -23,6 +24,7 @@ import useInitPage from "../hooks/useInitPage";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [registerNewUser] = useRegisterMutation();
   const [showPass, setShowPass] = useState(false);
@@ -41,13 +43,24 @@ const Signup = () => {
     setShowPassConfirm((currentShowPassConfirm) => !currentShowPassConfirm);
 
   const login = async (values) => {
-    const { email, password, firstname, lastname } = values;
-    await registerNewUser({
-      email,
-      password,
-      firstname,
-      lastname,
-    }).unwrap();
+    try {
+      const { email, password, firstname, lastname } = values;
+      await registerNewUser({
+        email,
+        password,
+        firstname,
+        lastname,
+      }).unwrap();
+    } catch (error) {
+      toast.closeAll();
+      toast({
+        position: "top",
+        title: error.data.message,
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
     // navigate("/");
   };
 
