@@ -33,29 +33,27 @@ const routes = [
     path: "/",
     name: "Inicio",
     icon: GiStairsGoal,
+    isAdmin: false,
   },
   {
     id: 2,
     path: "/groups",
     name: "Grupos",
     icon: HiUserGroup,
+    isAdmin: true,
   },
   {
     id: 3,
     path: "/matches",
     name: "Partidos",
     icon: GiSoccerBall,
+    isAdmin: false,
   },
   {
     id: 4,
-    path: "/positions",
-    name: "Posiciones",
-    icon: GiStairsGoal,
-  },
-  {
-    id: 5,
     name: "Salir",
     icon: HiOutlineLogout,
+    isAdmin: false,
   },
 ];
 
@@ -101,24 +99,41 @@ const Nav = () => {
                   templateColumns="repeat(3, 1fr)"
                   gap="2rem"
                 >
-                  {routes.map((route) => (
-                    <Box key={route.id}>
-                      {"path" in route ? (
-                        <NavLink
-                          end
-                          // onClick={() => goToPath(route.path)}
-                          to={`${route.path}`}
-                          style={(props) => {
-                            const { isActive } = props;
-                            return isActive
-                              ? {
-                                  fontWeight: "bold",
-                                  color: "#850f32",
-                                }
-                              : undefined;
-                          }}
-                        >
+                  {routes
+                    .filter(
+                      (route) =>
+                        (route.isAdmin && user.isAdmin) ||
+                        route.isAdmin === false
+                    )
+                    .map((route) => (
+                      <Box key={route.id}>
+                        {"path" in route ? (
+                          <NavLink
+                            end
+                            // onClick={() => goToPath(route.path)}
+                            to={`${route.path}`}
+                            style={(props) => {
+                              const { isActive } = props;
+                              return isActive
+                                ? {
+                                    fontWeight: "bold",
+                                    color: "#850f32",
+                                  }
+                                : undefined;
+                            }}
+                          >
+                            <Box
+                              display="flex"
+                              flexDirection="column"
+                              alignItems="center"
+                            >
+                              <Icon as={route.icon} fontSize="1.2rem" />
+                              {route.name}
+                            </Box>
+                          </NavLink>
+                        ) : (
                           <Box
+                            onClick={userLogout}
                             display="flex"
                             flexDirection="column"
                             alignItems="center"
@@ -126,20 +141,9 @@ const Nav = () => {
                             <Icon as={route.icon} fontSize="1.2rem" />
                             {route.name}
                           </Box>
-                        </NavLink>
-                      ) : (
-                        <Box
-                          onClick={userLogout}
-                          display="flex"
-                          flexDirection="column"
-                          alignItems="center"
-                        >
-                          <Icon as={route.icon} fontSize="1.2rem" />
-                          {route.name}
-                        </Box>
-                      )}
-                    </Box>
-                  ))}
+                        )}
+                      </Box>
+                    ))}
                 </Grid>
                 <Flex
                   // style={{ border: ".5px solid red" }}
