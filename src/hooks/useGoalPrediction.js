@@ -21,6 +21,7 @@ export default function useGoalPrediction(goal) {
 
   return [
     goalPrediction,
+    setGoalPrediction,
     () => setGoalPrediction(minusGoal),
     () => setGoalPrediction(addGoal),
   ];

@@ -1,5 +1,6 @@
 import React from "react";
-import { AddIcon, ArrowRightIcon, MinusIcon } from "@chakra-ui/icons";
+import { NavLink, useParams } from "react-router-dom";
+import dayjs from "dayjs";
 import {
   Box,
   Button,
@@ -13,8 +14,7 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import dayjs from "dayjs";
-import { NavLink, useParams } from "react-router-dom";
+import { AddIcon, ArrowRightIcon, MinusIcon } from "@chakra-ui/icons";
 
 function MatchTeam(props) {
   const { team } = props;
@@ -46,6 +46,7 @@ function Match(props) {
     updatePredictionLoading,
     updatePredictionDisabled,
     matchDetail,
+    randomGoalsPrediction,
   } = props;
   const { localMinusGoal, localAddGoal } = handlerLocalPrediction;
   const { visitorMinusGoal, visitorAddGoal } = handlerVisitorPrediction;
@@ -137,7 +138,18 @@ function Match(props) {
                   icon={<AddIcon color="brand.500" />}
                 />
               </Flex>
-              <Spacer />
+              <Box>
+                <Button
+                  onClick={randomGoalsPrediction}
+                  aria-label="randomGoals"
+                  colorScheme="brand"
+                  variant="outline"
+                  size="sm"
+                  fontSize="smaller"
+                >
+                  Aleatorio
+                </Button>
+              </Box>
               <Flex justifyContent="space-around">
                 <IconButton
                   onClick={visitorMinusGoal}

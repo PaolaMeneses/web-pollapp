@@ -8,17 +8,10 @@ import {
   Slide,
   Text,
   Icon,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuGroup,
-  MenuItem,
-  MenuDivider,
-  Button,
 } from "@chakra-ui/react";
 import { ChevronUpIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom";
-import { GiSoccerBall, GiStairsGoal } from "react-icons/gi";
+import { GiFiles, GiSoccerBall, GiStairsGoal } from "react-icons/gi";
 import { setAppConfig } from "../store/app";
 import { logout } from "../store/auth";
 import {
@@ -44,9 +37,9 @@ const routes = [
   },
   {
     id: 3,
-    path: "/matches",
-    name: "Partidos",
-    icon: GiSoccerBall,
+    path: "/instructions",
+    name: "Instrucciones",
+    icon: GiFiles,
     isAdmin: false,
   },
   {

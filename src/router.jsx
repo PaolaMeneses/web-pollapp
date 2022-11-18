@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import MatchDetail from "./pages/MatchDetail";
 import Matches from "./pages/Matches";
+import Instructions from "./pages/Instructions";
 import Positions from "./pages/Positions";
 import Signup from "./pages/Signup";
 
@@ -35,6 +36,14 @@ const router = createBrowserRouter([
         element: (
           <PageProtected pageOpts={{ headerText: "Partidos" }}>
             <Matches />
+          </PageProtected>
+        ),
+      },
+      {
+        path: "/instructions",
+        element: (
+          <PageProtected pageOpts={{ headerText: "Instrucciones" }}>
+            <Instructions />
           </PageProtected>
         ),
       },

@@ -13,14 +13,30 @@ const UpcomingMatch = ({ pred }) => {
   const { boardId } = useParams();
   const toast = useToast();
 
-  const [localGoalPrediction, localMinusGoal, localAddGoal] = useGoalPrediction(
-    pred.localGoalPrediction ?? null
-  );
-  const [visitorGoalPrediction, visitorMinusGoal, visitorAddGoal] =
-    useGoalPrediction(pred.visitorGoalPrediction ?? null);
+  const [
+    localGoalPrediction,
+    setLocalGoalPrediction,
+    localMinusGoal,
+    localAddGoal,
+  ] = useGoalPrediction(pred.localGoalPrediction ?? null);
+  const [
+    visitorGoalPrediction,
+    setVisitorGoalPrediction,
+    visitorMinusGoal,
+    visitorAddGoal,
+  ] = useGoalPrediction(pred.visitorGoalPrediction ?? null);
 
   const [updatePredictionGoals, { isLoading }] =
     useUpdatePredictionGoalsMutation();
+
+  const getRandomInt = (max = 7) => {
+    return Math.floor(Math.random() * max);
+  };
+
+  const randomGoalsPrediction = () => {
+    setLocalGoalPrediction(getRandomInt());
+    setVisitorGoalPrediction(getRandomInt());
+  };
 
   const handlerUpdatePrediction = async () => {
     try {
@@ -58,7 +74,9 @@ const UpcomingMatch = ({ pred }) => {
         isClosable: true,
       });
     } catch (error) {
-      console.log("error", error);
+      setLocalGoalPrediction(pred.localGoalPrediction ?? null);
+      setVisitorGoalPrediction(pred.visitorGoalPrediction ?? null);
+
       toast({
         position: "top",
         title: error.data.message,
@@ -77,6 +95,7 @@ const UpcomingMatch = ({ pred }) => {
       handlerVisitorPrediction={{ visitorMinusGoal, visitorAddGoal }}
       handlerUpdatePrediction={handlerUpdatePrediction}
       updatePredictionLoading={isLoading}
+      randomGoalsPrediction={randomGoalsPrediction}
       updatePredictionDisabled={
         localGoalPrediction === null ||
         visitorGoalPrediction === null ||
