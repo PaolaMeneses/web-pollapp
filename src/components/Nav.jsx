@@ -36,6 +36,13 @@ const routes = [
     isAdmin: true,
   },
   {
+    id: 5,
+    path: "/matches",
+    name: "Partidos",
+    icon: GiSoccerBall,
+    isAdmin: true,
+  },
+  {
     id: 3,
     path: "/instructions",
     name: "Instrucciones",

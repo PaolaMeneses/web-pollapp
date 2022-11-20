@@ -35,6 +35,16 @@ export const matchesApi = createApi({
         return data;
       },
     }),
+    updateMatchGoals: builder.mutation({
+      query: ({ match_id, payload }) => ({
+        url: `/${match_id}/close`,
+        method: "PATCH",
+        body: payload,
+      }),
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
   }),
 });
 
@@ -42,4 +52,5 @@ export const {
   useGetActiveMatchesQuery,
   useGetMatchByIdQuery,
   useGetMatchPredictionsByIdQuery,
+  useUpdateMatchGoalsMutation,
 } = matchesApi;

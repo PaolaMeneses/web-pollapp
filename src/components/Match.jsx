@@ -6,15 +6,31 @@ import {
   Button,
   Circle,
   Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Grid,
   GridItem,
   IconButton,
   Image,
+  Input,
   Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { AddIcon, ArrowRightIcon, MinusIcon } from "@chakra-ui/icons";
+import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { useUpdateMatchGoalsMutation } from "../api/matches";
 
 function MatchTeam(props) {
   const { team } = props;
@@ -51,7 +67,51 @@ function Match(props) {
   const { localMinusGoal, localAddGoal } = handlerLocalPrediction;
   const { visitorMinusGoal, visitorAddGoal } = handlerVisitorPrediction;
   const { boardId } = useParams();
+  const { user } = useSelector((state) => state.auth);
   const allowPred = dayjs(match.date).unix() > dayjs().unix();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [handlerRequestABoard, { isLoading }] = useUpdateMatchGoalsMutation();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm();
+  const toast = useToast();
+  const saveResultMatch = async (values) => {
+    const { localGoals, visitorGoals } = values;
+    console.log({ values });
+    toast.closeAll();
+    try {
+      await handlerRequestABoard({
+        match_id: match._id,
+        payload: {
+          localGoals,
+          visitorGoals,
+          localGeneralGoals: localGoals,
+          visitorGeneralGoals: visitorGoals,
+          isClosed: true,
+        },
+      }).unwrap();
+      toast({
+        position: "top",
+        title: "Partido cerrado con exito",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        position: "top",
+        title: error.data.message,
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <>
       <Box
@@ -186,6 +246,25 @@ function Match(props) {
               </Link>
             </Flex>
           )}
+
+          {user.isAdmin && (
+            <Flex
+              justify="center"
+              alignItems="center"
+              color="brand.500"
+              mb="10px"
+            >
+              <Button
+                onClick={onOpen}
+                variant="outline"
+                size="sm"
+                fontSize="smaller"
+                colorScheme="brand"
+              >
+                Cerrar partido
+              </Button>
+            </Flex>
+          )}
         </Box>
         {showPredictionBtns && allowPred && (
           <Button
@@ -226,6 +305,68 @@ function Match(props) {
           </Box>
         )}
       </Box>
+      <Modal
+        isCentered
+        onClose={onClose}
+        isOpen={isOpen}
+        motionPreset="slideInBottom"
+      >
+        <form onSubmit={handleSubmit(saveResultMatch)}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Cerrar partido</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl isInvalid={errors.localGoals} mb="10px">
+                <FormLabel htmlFor="localGoals">Goles local</FormLabel>
+                <Input
+                  id="localGoals"
+                  borderRadius="25px"
+                  type="number"
+                  {...register("localGoals", {
+                    // value: "andares@qemal.co",
+                    valueAsNumber: true,
+                    setValueAs: (v) => Number(v),
+                    required: "Falta goles local",
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.localGoals && errors.localGoals.message}
+                </FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={errors.visitorGoals} mb="10px">
+                <FormLabel htmlFor="visitorGoals">Goles visitantes</FormLabel>
+                <Input
+                  id="visitorGoals"
+                  borderRadius="25px"
+                  type="number"
+                  {...register("visitorGoals", {
+                    // value: "andares@qemal.co",
+                    valueAsNumber: true,
+                    setValueAs: (v) => Number(v),
+                    required: "Falta goles local",
+                  })}
+                />
+                <FormErrorMessage>
+                  {errors.visitorGoals && errors.visitorGoals.message}
+                </FormErrorMessage>
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onClose}>
+                Cancelar
+              </Button>
+              <Button
+                colorScheme="brand"
+                type="submit"
+                isLoading={isSubmitting}
+              >
+                Guardar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </form>
+      </Modal>
     </>
   );
 }
