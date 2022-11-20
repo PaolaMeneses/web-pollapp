@@ -40,8 +40,6 @@ const MatchDetail = () => {
     isFetching: predsIsFetching,
   } = useGetMatchPredictionsByIdQuery({ matchId, group_id });
 
-  console.log("data :>> ", match);
-  console.log("preds :>> ", preds);
   return (
     <>
       {match && (
@@ -52,17 +50,16 @@ const MatchDetail = () => {
 
       <Tabs colorScheme="brand" isFitted>
         <TabList mb="1em">
-          {match?.isClosed && (
+          {/* {match?.isClosed && (
             <Tab>
               <Text as="b">Detalle</Text>
             </Tab>
-          )}
+          )} */}
           <Tab>
             <Text as="b">Predicciones</Text>
           </Tab>
         </TabList>
         <TabPanels>
-          {match?.isClosed && <TabPanel></TabPanel>}
           <TabPanel>
             {predsIsLoading || predsIsFetching ? (
               <Center>
@@ -82,6 +79,7 @@ const MatchDetail = () => {
                       <Th>Local</Th>
                       <Th>Visitante</Th>
                       <Th># Tabla - Nombre</Th>
+                      <Th>Puntos</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -97,12 +95,13 @@ const MatchDetail = () => {
                           }),
                         }}
                       >
-                        <Td>{pred.localGoalPrediction ?? "-"}</Td>
-                        <Td>{pred.visitorGoalPrediction ?? "-"}</Td>
+                        <Td isNumeric>{pred.localGoalPrediction ?? "-"}</Td>
+                        <Td isNumeric>{pred.visitorGoalPrediction ?? "-"}</Td>
                         <Td>
                           {pred.board.number} - {pred.board.user.firstname}{" "}
                           {pred.board.user.lastname}
                         </Td>
+                        <Td isNumeric>{pred.points}</Td>
                       </Tr>
                     ))}
                   </Tbody>

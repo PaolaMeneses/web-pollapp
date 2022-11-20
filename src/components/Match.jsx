@@ -24,7 +24,7 @@ function MatchTeam(props) {
       // style={{ border: ".5px solid red" }}
       >
         <Box shadow="xl" mb={2}>
-          <Image src={`${team.flag}`} alt="" />
+          <Image loading="lazy" src={`${team.flag}`} alt="" />
         </Box>
         <Text fontSize={{ base: "lg" }} as="b">
           {team.name}

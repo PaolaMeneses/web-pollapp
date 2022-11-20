@@ -51,6 +51,8 @@ const Positions = () => {
               <Th>Pos</Th>
               <Th isNumeric>Puntos</Th>
               <Th># Tabla - Nombre</Th>
+              <Th>P3P</Th>
+              <Th>P1P</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -65,6 +67,8 @@ const Positions = () => {
                 <Td>
                   {board.number} - {board.user.firstname} {board.user.lastname}
                 </Td>
+                <Td isNumeric>{board.predsThreePoints}</Td>
+                <Td isNumeric>{board.predsOnePoints}</Td>
               </Tr>
             ))}
           </Tbody>
