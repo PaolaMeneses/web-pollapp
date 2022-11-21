@@ -1,5 +1,9 @@
 import React from "react";
 import {
+  Flex,
+  Stat,
+  StatArrow,
+  StatHelpText,
   Table,
   TableContainer,
   Tbody,
@@ -62,7 +66,26 @@ const Positions = () => {
                 color={boardId === board._id ? "brand.500" : "black"}
                 style={{ ...(boardId === board._id && { fontWeight: "bold" }) }}
               >
-                <Td>{board.current_pos || 0}</Td>
+                <Td>
+                  <Flex justifyContent="flex-end">
+                    {board.current_pos &&
+                    board.previous_pos &&
+                    board.current_pos !== board.previous_pos ? (
+                      <Stat>
+                        <StatHelpText fontSize="md">
+                          <StatArrow
+                            type={
+                              board.previous_pos > board.current_pos
+                                ? "increase"
+                                : "decrease"
+                            }
+                          />
+                        </StatHelpText>
+                      </Stat>
+                    ) : null}
+                    {board.current_pos || 0}
+                  </Flex>
+                </Td>
                 <Td isNumeric>{board.totalPoints}</Td>
                 <Td>
                   {board.number} - {board.user.firstname} {board.user.lastname}
