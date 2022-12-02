@@ -5,6 +5,7 @@ import { boardsApi } from "../api/board";
 import { groupsApi } from "../api/groups";
 import { matchesApi } from "../api/matches";
 import { predictionsApi } from "../api/predictions";
+import { teamsApi } from "../api/teams";
 
 import appSlice from "./app";
 import authSlice from "./auth";
@@ -18,6 +19,7 @@ export const store = configureStore({
     [boardsApi.reducerPath]: boardsApi.reducer,
     [predictionsApi.reducerPath]: predictionsApi.reducer,
     [matchesApi.reducerPath]: matchesApi.reducer,
+    [teamsApi.reducerPath]: teamsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -25,7 +27,8 @@ export const store = configureStore({
       groupsApi.middleware,
       boardsApi.middleware,
       predictionsApi.middleware,
-      matchesApi.middleware
+      matchesApi.middleware,
+      teamsApi.middleware
     ),
 });
 

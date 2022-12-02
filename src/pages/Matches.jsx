@@ -12,14 +12,15 @@ import {
 
 import { useGetActiveMatchesQuery } from "../api/matches";
 import Match from "../components/Match";
+import { useTeamListQuery } from "../api/teams";
 
 function Matches() {
   const [previousMatches, setPreviousMatches] = useState([]);
 
   const { data: matches, isLoading } = useGetActiveMatchesQuery();
-  console.log("matches :>> ", matches);
+  const { data: teams, isLoading: isLoadingTeams } = useTeamListQuery();
 
-  if (isLoading) {
+  if (isLoading || isLoadingTeams) {
     return (
       <Center>
         <Spinner
@@ -47,7 +48,7 @@ function Matches() {
         <TabPanels>
           <TabPanel>
             {matches.map((match) => (
-              <Match key={match._id} match={match} />
+              <Match key={match._id} type="matches" match={match} />
             ))}
           </TabPanel>
           <TabPanel>

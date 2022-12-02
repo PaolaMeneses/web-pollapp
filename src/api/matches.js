@@ -45,6 +45,16 @@ export const matchesApi = createApi({
         return data;
       },
     }),
+    updateMatch: builder.mutation({
+      query: ({ match_id, payload }) => ({
+        url: `/${match_id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      transformResponse: ({ data }) => {
+        return data;
+      },
+    }),
   }),
 });
 
@@ -53,4 +63,5 @@ export const {
   useGetMatchByIdQuery,
   useGetMatchPredictionsByIdQuery,
   useUpdateMatchGoalsMutation,
+  useUpdateMatchMutation,
 } = matchesApi;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import {
@@ -22,6 +22,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Spacer,
   Text,
   useDisclosure,
@@ -30,7 +31,11 @@ import {
 import { AddIcon, ArrowRightIcon, MinusIcon } from "@chakra-ui/icons";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useUpdateMatchGoalsMutation } from "../api/matches";
+import {
+  useUpdateMatchGoalsMutation,
+  useUpdateMatchMutation,
+} from "../api/matches";
+import { teamsApi } from "../api/teams";
 
 function MatchTeam(props) {
   const { team } = props;
@@ -69,9 +74,19 @@ function Match(props) {
   const { boardId } = useParams();
   const { user } = useSelector((state) => state.auth);
   const allowPred = dayjs(match.date).unix() > dayjs().unix();
+  const { data: teams } = useSelector(teamsApi.endpoints.teamList.select());
+  const [localTeamId, setLocalTeamId] = useState(match.localTeam._id);
+  const [visitorTeamId, setVisitorTeamId] = useState(match.visitorTeam._id);
+  const [isSubmittingUpdateMatch, setIsSubmittingUpdateMatch] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenUpdateMatch,
+    onOpen: onOpenUpdateMatch,
+    onClose: onCloseUpdateMatch,
+  } = useDisclosure();
   const [handlerRequestABoard, { isLoading }] = useUpdateMatchGoalsMutation();
+  const [handlerUpdateMatch] = useUpdateMatchMutation();
   const {
     handleSubmit,
     register,
@@ -80,7 +95,6 @@ function Match(props) {
   const toast = useToast();
   const saveResultMatch = async (values) => {
     const { localGoals, visitorGoals } = values;
-    console.log({ values });
     toast.closeAll();
     try {
       await handlerRequestABoard({
@@ -110,6 +124,45 @@ function Match(props) {
         isClosable: true,
       });
     }
+  };
+
+  const showUpdateMatch = () => {
+    if (!user.isAdmin || type !== "matches") return;
+
+    onOpenUpdateMatch();
+  };
+
+  const updateMatch = async (e) => {
+    e.preventDefault();
+    toast.closeAll();
+    try {
+      setIsSubmittingUpdateMatch(true);
+      await handlerUpdateMatch({
+        match_id: match._id,
+        payload: {
+          localTeam_id: localTeamId,
+          visitorTeam_id: visitorTeamId,
+          isActive: true,
+        },
+      }).unwrap();
+      toast({
+        position: "top",
+        title: "Partido actualizado con exito",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+      onCloseUpdateMatch();
+    } catch (error) {
+      toast({
+        position: "top",
+        title: error.data.message,
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
+    setIsSubmittingUpdateMatch(false);
   };
 
   return (
@@ -166,15 +219,33 @@ function Match(props) {
                   </Text>
                 )}
               </GridItem>
-              <GridItem rowSpan={1}>
+              <GridItem rowSpan={1} onClick={showUpdateMatch}>
                 <Text as="i" fontWeight="bold" fontSize={{ base: "15px" }}>
                   VS
                 </Text>
               </GridItem>
               <GridItem rowSpan={1}>
-                <Text fontSize={{ base: "20px" }}>{`${
-                  match.localGoalPrediction ?? ""
-                } - ${match.visitorGoalPrediction ?? ""}`}</Text>
+                {type === "matches" ? (
+                  <Flex
+                    flexDirection="column"
+                    justifyContent="flex-end"
+                    // style={{ border: ".5px solid red" }}
+                    color="gray"
+                    h="100%"
+                  >
+                    <Text as="b" fontSize="lg">
+                      {dayjs(match.date).format("DD/MM")}
+                    </Text>
+                    <Text fontSize="md">
+                      {" "}
+                      {dayjs(match.date).format("HH:mm")}
+                    </Text>
+                  </Flex>
+                ) : (
+                  <Text fontSize={{ base: "20px" }}>{`${
+                    match.localGoalPrediction ?? ""
+                  } - ${match.visitorGoalPrediction ?? ""}`}</Text>
+                )}
               </GridItem>
             </Grid>
             <MatchTeam team={match.visitorTeam} />
@@ -360,6 +431,67 @@ function Match(props) {
                 colorScheme="brand"
                 type="submit"
                 isLoading={isSubmitting}
+              >
+                Guardar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </form>
+      </Modal>
+      <Modal
+        isCentered
+        onClose={onCloseUpdateMatch}
+        isOpen={isOpenUpdateMatch}
+        motionPreset="slideInBottom"
+      >
+        <form onSubmit={updateMatch}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Actualizar partido</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl mb="10px">
+                <FormLabel htmlFor="localGoals">Goles local</FormLabel>
+                <Select
+                  placeholder="Select option"
+                  defaultValue={localTeamId}
+                  onChange={(e) => setLocalTeamId(e.target.value)}
+                >
+                  {teams?.map((team) => (
+                    <option key={team._id} value={team._id}>
+                      {team.name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl mb="10px">
+                <FormLabel htmlFor="visitorGoals">Goles visitantes</FormLabel>
+                <Select
+                  placeholder="Select option"
+                  defaultValue={visitorTeamId}
+                  onChange={(e) => setVisitorTeamId(e.target.value)}
+                >
+                  {teams?.map((team) => (
+                    <option key={team._id} value={team._id}>
+                      {team.name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                variant="ghost"
+                mr={3}
+                onClick={onCloseUpdateMatch}
+                isLoading={isSubmittingUpdateMatch}
+              >
+                Cancelar
+              </Button>
+              <Button
+                colorScheme="brand"
+                type="submit"
+                isLoading={isSubmittingUpdateMatch}
               >
                 Guardar
               </Button>
