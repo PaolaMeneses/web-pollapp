@@ -21,6 +21,11 @@ import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useLoginMutation } from "../api/auth";
 import useInitPage from "../hooks/useInitPage";
 
+export function userlogin({ email, password })  {
+
+  return (email === "paolamenesescalderon@gmail.com" && password === "12345678")
+}
+
 const Login = () => {
   const toast = useToast();
   const [userLogin, { isLoading, error, data }] = useLoginMutation();
